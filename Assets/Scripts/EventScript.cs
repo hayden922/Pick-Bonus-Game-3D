@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class EventScript : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class EventScript : MonoBehaviour
     
 
     [SerializeField] EventSystem eventSystem;
+
+    private Vector3 tmpMousePosition;
     // Start is called before the first frame update
     
     
@@ -19,13 +23,47 @@ public class EventScript : MonoBehaviour
     
     void Start()
     {
-       
+       tmpMousePosition = Input.mousePosition;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+
+       if (Input.GetKeyDown(KeyCode.UpArrow)||Input.GetKeyDown(KeyCode.DownArrow)||Input.GetKeyDown(KeyCode.RightArrow)||Input.GetKeyDown(KeyCode.LeftArrow)||Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.D)||Input.GetKeyDown(KeyCode.A))
+       {
+
+        if(eventSystem.currentSelectedGameObject == null)
+        {
+
+             if(GameController.inGame == false)
+            {
+            SwitchToPlayMenu();
+            }
+            
+            else
+            {
+             SwitchToPumpkins();
+            }
+
+
+        }
+
+       
+
+       
+
+    }
+
+
+    
+        if (tmpMousePosition != Input.mousePosition){
+            Debug.Log("Mouse moved");
+            SwitchToNull();
+            tmpMousePosition = Input.mousePosition;
+    
+        }
         
     }
     public void SwitchToNull()
@@ -47,6 +85,7 @@ public class EventScript : MonoBehaviour
         
         
     }
+    
     public void SwitchToPlayMenu()
     {
 

@@ -93,6 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1002246565555337525}
+  - component: {fileID: 4070793999486542287}
   m_Layer: 0
   m_Name: pumpkinforGame
   m_TagString: Untagged
@@ -119,6 +120,24 @@ Transform:
   - {fileID: 9064277138513617378}
   m_Father: {fileID: 645712879118450701}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4070793999486542287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478333035074790287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.5409963, g: 0.8301887, b: 0.20754717, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &664872849407795938
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f92499da275db254bb667a5b1da0a038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outlineScript: {fileID: 4070793999486542287}
   eventScript: {fileID: 0}
   controller: {fileID: 0}
   pump: {fileID: 1378490006989608526}
@@ -328,7 +348,6 @@ MonoBehaviour:
   chestButton: {fileID: 0}
   pumpLidPos: {x: 0, y: 0, z: 0}
   pumpNum: 0
-  outlineMaterial: {fileID: 2100000, guid: d112de2206f9d2d46bd5c3151141a6bc, type: 2}
 --- !u!1 &6099391290599541828
 GameObject:
   m_ObjectHideFlags: 0

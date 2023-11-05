@@ -46,6 +46,8 @@ public class GameController : MonoBehaviour
      [SerializeField] private Vector3 playMenuTargetPosition; 
      [SerializeField] private float playMenuAnimationDuration;
 
+     static public bool inGame = false;
+
      
 
      
@@ -89,6 +91,10 @@ public class GameController : MonoBehaviour
 
     
 
+    void Awake()
+    {
+       
+    }
 
 
     void Start()
@@ -96,7 +102,7 @@ public class GameController : MonoBehaviour
         playButton.interactable = true;
         increaseDenomButton.interactable = true;
         decreaseDenomButton.interactable = true;
-        eventScript.SwitchToPlayMenu();
+        
         currentDenom = possibleDenoms[0];
         currentDenomText.text = currentDenom.ToString("C",new CultureInfo("en-US"));
         outlines[denomValue].SetActive(true);
@@ -140,6 +146,8 @@ public class GameController : MonoBehaviour
         }
         else
         {
+
+            inGame = true;
              for (int i = 0; i < selectablePumpkins.Length; i++)
              {
                 
@@ -208,7 +216,8 @@ public class GameController : MonoBehaviour
            
         }
         
-        //eventScript.SwitchToPumpkins();
+        
+        Pumpkin.hoveredOnce = false;
         
         
     }
@@ -324,6 +333,7 @@ public class GameController : MonoBehaviour
     public void GameEnd()
     {
             balance.AddToBalance(winAmount);
+            Pumpkin.hoveredOnce = false;
             
             DisableChestButtons();
             for (int i = 0; i < pumpkins.Length; i++)
@@ -342,7 +352,7 @@ public class GameController : MonoBehaviour
                 playButton.interactable = true;
                 increaseDenomButton.interactable = true;
                 decreaseDenomButton.interactable = true;
-                eventScript.SwitchToPlayMenu();
+                inGame = false;
             });
             mainPanel.PanelLeave();
             

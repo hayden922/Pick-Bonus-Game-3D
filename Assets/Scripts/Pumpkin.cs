@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class Pumpkin : MonoBehaviour
 {
 
+
+     [SerializeField] Outline outlineScript;
      [SerializeField] EventScript eventScript;
     [SerializeField] GameController controller;
     [SerializeField] private Transform pump; 
@@ -47,6 +49,8 @@ public class Pumpkin : MonoBehaviour
 
     [SerializeField] int pumpNum;
 
+
+    static public bool hoveredOnce = false; 
      
    
 
@@ -66,6 +70,7 @@ public class Pumpkin : MonoBehaviour
         pumpLid.localRotation = Quaternion.identity;
         pumpLid.localPosition = pumpLidPos;
         SpinChest();
+        outlineScript.OutlineWidth = 0;
         
 
         
@@ -81,6 +86,14 @@ public class Pumpkin : MonoBehaviour
     {
             if(clicked == false)
             {
+                var foundPumpkins = FindObjectsOfType<Pumpkin>();
+                for (int i = 0; i < foundPumpkins.Length; ++i)
+                {
+                    foundPumpkins[i].HoverLeave();
+
+                }
+                hoveredOnce = true;
+                outlineScript.OutlineWidth = 10;
                 
                 hovering = true;
                 Shake();
@@ -105,6 +118,7 @@ public class Pumpkin : MonoBehaviour
         
         if(clicked == false)
         {
+            outlineScript.OutlineWidth = 0;
             Debug.Log("was false");
             controller.DisableChestButtons();
             clicked = true;
@@ -119,6 +133,7 @@ public class Pumpkin : MonoBehaviour
     {
         if (clicked == false)
         {
+            outlineScript.OutlineWidth = 0;
             Debug.Log("left hover");
             hovering = false;
             ShakeLeave();
@@ -206,7 +221,7 @@ public class Pumpkin : MonoBehaviour
         controller.RemoveFromSelectable(pumpNum);
         this.gameObject.SetActive(false);
         controller.EnableChestButtons();
-        eventScript.SwitchToPumpkins();
+        
         
         
     }
@@ -266,6 +281,7 @@ public class Pumpkin : MonoBehaviour
 
         if(clicked == false)
         {
+            outlineScript.OutlineWidth = 0;
             pump.transform.DOKill();
             pump.DORotate(spinTargetRotation, spinAnimationDuration, RotateMode.FastBeyond360).SetLoops(-1,LoopType.Restart).SetEase(Ease.Linear);
         }

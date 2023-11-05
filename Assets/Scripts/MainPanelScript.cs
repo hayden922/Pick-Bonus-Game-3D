@@ -50,9 +50,20 @@ public class MainPanelScript : MonoBehaviour
     IEnumerator PokeStarter(Pumpkin starter)
     {
         yield return new WaitForSeconds(0.85f);
+        
+        
         controller.EnableChestButtons();
-        //eventScript.SwitchToNull();
+        /*
+        yield return new WaitForSeconds(0.1f);
+        if(Pumpkin.hoveredOnce == false)
+        {
+            eventScript.SwitchToNull();
+
+        }
         eventScript.SwitchToPumpkins();
+        */
+        
+        
         //starter.Hover();
     }
 
