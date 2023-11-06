@@ -59,7 +59,7 @@ public class EventScript : MonoBehaviour
 
     
         if (tmpMousePosition != Input.mousePosition){
-            Debug.Log("Mouse moved");
+            
             SwitchToNull();
             tmpMousePosition = Input.mousePosition;
     

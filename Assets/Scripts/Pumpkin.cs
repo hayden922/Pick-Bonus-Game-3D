@@ -79,6 +79,8 @@ public class Pumpkin : MonoBehaviour
     
     void Update()
     {
+
+        
      
     }
 
@@ -87,11 +89,11 @@ public class Pumpkin : MonoBehaviour
             if(clicked == false)
             {
                 var foundPumpkins = FindObjectsOfType<Pumpkin>();
-                for (int i = 0; i < foundPumpkins.Length; ++i)
-                {
-                    foundPumpkins[i].HoverLeave();
-
-                }
+               // for (int i = 0; i < foundPumpkins.Length; ++i)
+              //  {
+              //      foundPumpkins[i].HoverLeave();
+//
+              // }
                 hoveredOnce = true;
                 outlineScript.OutlineWidth = 10;
                 
@@ -107,7 +109,7 @@ public class Pumpkin : MonoBehaviour
     public void Click()
     {
         
-        Debug.Log("hello");
+       
         if (lastClick > (Time.time - 1f))
         {
             return;
@@ -118,8 +120,9 @@ public class Pumpkin : MonoBehaviour
         
         if(clicked == false)
         {
+            pump.transform.DOKill();
             outlineScript.OutlineWidth = 0;
-            Debug.Log("was false");
+           
             controller.DisableChestButtons();
             clicked = true;
             Open();
@@ -131,13 +134,12 @@ public class Pumpkin : MonoBehaviour
 
     public void HoverLeave()
     {
-        if (clicked == false)
-        {
+        
             outlineScript.OutlineWidth = 0;
-            Debug.Log("left hover");
+           
             hovering = false;
             ShakeLeave();
-        }
+        
         
     }
 
@@ -160,7 +162,7 @@ public class Pumpkin : MonoBehaviour
                 {
                     pumpLid.DOMove(lidOpenTargetPosition, lidOpenAnimationDuration).SetEase(Ease.Linear);
                     pumpLid.DOLocalRotate(lidOpenTargetRotation, lidOpenAnimationDuration).SetEase(Ease.Linear).OnComplete(()=>{  
-                        Debug.Log("hello");             
+                                     
                         controller.ChestClick(this);  
 
                     });
@@ -175,7 +177,7 @@ public class Pumpkin : MonoBehaviour
                 {
                     pumpLid.DOMove(lidOpenTargetPosition, lidOpenAnimationDuration).SetEase(Ease.Linear);
                     pumpLid.DOLocalRotate(lidOpenTargetRotation, lidOpenAnimationDuration).SetEase(Ease.Linear).OnComplete(()=>{  
-                        Debug.Log("hello");             
+                                    
                         controller.ChestClick(this);  
 
                     });
@@ -197,7 +199,8 @@ public class Pumpkin : MonoBehaviour
 
     public void Restart()
     {
-        pump.transform.DOKill();
+        
+        HoverLeave();
         pump.localScale = Vector3.one;
         pump.localPosition = Vector3.zero;
         pump.localRotation = Quaternion.identity;
@@ -208,16 +211,11 @@ public class Pumpkin : MonoBehaviour
 
     public void CollectionEnd()
     {
-        
+        clicked = false;
         HoverLeave();
         ButtonOff();
-        clicked = false;
         pump.transform.DOKill();
-        //pump.localScale = Vector3.one;
-        //pump.localPosition = Vector3.zero;
-        //pump.localRotation = Quaternion.identity;
-        //ResetLid();
-       // SpinChest();
+       
         controller.RemoveFromSelectable(pumpNum);
         this.gameObject.SetActive(false);
         controller.EnableChestButtons();
@@ -235,7 +233,7 @@ public class Pumpkin : MonoBehaviour
 
     private void Shake()
     {   
-
+        pump.transform.DOKill();
         shakeDone = false;
         pump.localScale = Vector3.one;
         pump.localPosition = Vector3.zero;
@@ -250,11 +248,13 @@ public class Pumpkin : MonoBehaviour
             pump.localPosition = Vector3.zero;
             pump.localRotation = Quaternion.identity;
             ResetLid();
-            pump.transform.DOKill();
+            
             if(hovering == false)
             {
+
                 pump.transform.DOKill();
                 SpinChest();
+
                
                 
             }
@@ -266,9 +266,11 @@ public class Pumpkin : MonoBehaviour
     }
     private void ShakeLeave()
     {
+       
+        
         if(shakeDone == true)
         {
-            pump.transform.DOKill();
+            
             SpinChest();
             shakeDone = false;
         }
@@ -279,12 +281,15 @@ public class Pumpkin : MonoBehaviour
     private void SpinChest()
     {
 
-        if(clicked == false)
-        {
+        
+         
+           
+         
+            shakeDone = false;
             outlineScript.OutlineWidth = 0;
-            pump.transform.DOKill();
+           pump.transform.DOKill();
             pump.DORotate(spinTargetRotation, spinAnimationDuration, RotateMode.FastBeyond360).SetLoops(-1,LoopType.Restart).SetEase(Ease.Linear);
-        }
+        
         
         
     }
