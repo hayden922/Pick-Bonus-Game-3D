@@ -330,23 +330,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f92499da275db254bb667a5b1da0a038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineScript: {fileID: 4070793999486542287}
-  eventScript: {fileID: 0}
-  controller: {fileID: 0}
   pump: {fileID: 1378490006989608526}
   pumpLid: {fileID: 8710509808238762000}
+  chestButton: {fileID: 0}
   spinTargetRotation: {x: 0, y: 360, z: 0}
   spinAnimationDuration: 2
   openTargetPosition: {x: 0.02, y: -2.5, z: -6}
   openAnimationDuration: 0.5
+  pumpLidPos: {x: 0, y: 0, z: 0}
   lidOpenTargetRotation: {x: 79.519, y: 0, z: 0}
   lidOpenTargetPosition: {x: 0, y: 0, z: -5}
   lidOpenAnimationDuration: 0.5
   openTargetScale: {x: 3, y: 3, z: 3}
-  shakeAnimationDuration: 0.5
-  shakeAnimationStrength: 0.35
-  chestButton: {fileID: 0}
-  pumpLidPos: {x: 0, y: 0, z: 0}
+  shakeAnimationDuration: 0.25
+  shakeAnimationStrength: 0.4
+  outlineScript: {fileID: 4070793999486542287}
+  eventScript: {fileID: 0}
+  controller: {fileID: 0}
+  buttonPress: {fileID: 0}
   pumpNum: 0
 --- !u!1 &6099391290599541828
 GameObject:

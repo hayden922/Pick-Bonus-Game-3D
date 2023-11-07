@@ -3,7 +3,17 @@ guid: 4cbf35afbdaf59c45bde51c2181a574e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: candyMiddle
+    second: {fileID: 2100000, guid: daeaf6f588cd43145a281d6986ba6850, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: candySides
+    second: {fileID: 2100000, guid: 2446de78742df3e4f93d28c0e4ca8444, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
