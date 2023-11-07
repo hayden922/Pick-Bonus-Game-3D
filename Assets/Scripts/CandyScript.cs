@@ -10,12 +10,13 @@ using DG.Tweening;
 using System.Collections.ObjectModel;
 using UnityEngine.UIElements;
 using System.ComponentModel;
-using UnityEditor.Callbacks;
+
 
 public class CandyScript : MonoBehaviour
 {
 
 
+    [Category("Chest Amount Text")]
     [SerializeField] float chestAmountAnimationDuration;
 
     [SerializeField] CanvasGroup chestAmountCanvasGroup;
@@ -26,7 +27,8 @@ public class CandyScript : MonoBehaviour
 
 
     RectTransform chestAmountStartingPos;
-    
+
+     [Category("Candy Bag")]
     [SerializeField] GameObject candyBag;
 
     [SerializeField] float candyBagAnimationDuration;
@@ -50,8 +52,13 @@ public class CandyScript : MonoBehaviour
     List<GameObject> candy = new List<GameObject>();
     [SerializeField] private Transform parent;
 
+    [Category("Sounds")]
+
     [SerializeField] AudioClip collectionSound;
 
+    [SerializeField] AudioClip woosh;
+
+    [SerializeField] AudioClip winSound;
 
     void Start()
     {
@@ -71,6 +78,7 @@ public class CandyScript : MonoBehaviour
             Debug.Log("moving text");
             chestAmountCanvasGroup.alpha = 0f;
             currentChest.CollectionEnd();
+            SoundManager.Instance.PlaySound(woosh);
         }); 
         chestAmountCanvasGroup.DOFade(0f, chestAmountAnimationDuration);
         
@@ -181,13 +189,13 @@ public class CandyScript : MonoBehaviour
             
             float duration = UnityEngine.Random.Range (.5f, 1.5f); //finds random duration for accomplishing DO calls so candies do not move all at same time.
 
-            
+                SoundManager.Instance.PlaySound(winSound);    
                 //Moves object up on y axis to look like coming out of pumpkin chest.
                 currentCandy.DOMove(new Vector3(currentCandy.position.x,currentCandy.position.y+3f,currentCandy.position.z), .75f).SetEase (Ease.InOutBack);
                 //Scales candy up to current scale.
                 currentCandy.DOScale(currentScale, .90f).SetEase(Ease.OutBack).OnComplete(()=>
                 {
-
+                    
                     //show amount gained from chest on screen
                     chestAmountText.text = currentAmount.ToString("C",new CultureInfo("en-US"));
                     chestAmountCanvasGroup.alpha = 0f;

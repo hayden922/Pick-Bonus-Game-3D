@@ -348,6 +348,7 @@ MonoBehaviour:
   eventScript: {fileID: 0}
   controller: {fileID: 0}
   buttonPress: {fileID: 0}
+  mysteryTone: {fileID: 8300000, guid: a6bf1745ab072294394048e79a6edbe3, type: 3}
   pumpNum: 0
 --- !u!1 &6099391290599541828
 GameObject:
@@ -562,6 +563,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1135889005989213325}
   - component: {fileID: 6614691136929524223}
+  - component: {fileID: 5483632619557256522}
   m_Layer: 0
   m_Name: PumpLight
   m_TagString: Untagged
@@ -646,3 +648,26 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &5483632619557256522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329765792032691971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0

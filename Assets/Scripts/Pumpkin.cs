@@ -51,7 +51,8 @@ public class Pumpkin : MonoBehaviour
     
     
     [SerializeField] AudioClip buttonPress;
-    
+
+    [SerializeField] AudioClip mysteryTone;
     
 
     [Category("Values for Status Changes and Checks")]
@@ -181,6 +182,7 @@ public class Pumpkin : MonoBehaviour
         
         pump.DOScale(openTargetScale, openAnimationDuration).SetEase(Ease.Linear).OnComplete(()=>{
 
+            SoundManager.Instance.PlaySound(mysteryTone);
             pump.DORotate(spinTargetRotation, 0.75f, RotateMode.FastBeyond360).SetEase(Ease.Linear).OnComplete(()=>{
 
                 //if statment is here if I wanted to make animaiton changes between pooper or default candy collection animation, but not current differnece at the moment.
