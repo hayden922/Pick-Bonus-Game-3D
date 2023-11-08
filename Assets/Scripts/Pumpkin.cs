@@ -94,7 +94,7 @@ public class Pumpkin : MonoBehaviour
 
     public void Hover()
     {
-            if(clicked == false)
+            if(clicked == false && hovering == false)
             {
                 if(chestButton.interactable == true)
                 {

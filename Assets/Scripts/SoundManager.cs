@@ -15,7 +15,8 @@ public class SoundManager : MonoBehaviour
 
     void Awake() 
     
-    {
+    {   
+        //making sure there is only one instance
         if(Instance == null) 
         {
             Instance = this;
@@ -58,9 +59,26 @@ public class SoundManager : MonoBehaviour
         AudioListener.volume = value;
     }
 
+    public void MuteMusic()
+    {
+        //used in toggle
+        musicSource.mute = !musicSource.mute;
+    }
+
+
+
+    //last two methods put in just in case
+
     public void StopCurrentEffect()
     {
         effectSource.Stop();
+    }
+
+    public AudioClip FindCurrentSound()
+    {
+
+        AudioClip currentAudio = effectSource.clip;
+        return currentAudio;
     }
 
 
