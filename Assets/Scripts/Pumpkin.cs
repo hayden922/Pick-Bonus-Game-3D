@@ -53,7 +53,11 @@ public class Pumpkin : MonoBehaviour
     [SerializeField] AudioClip buttonPress;
 
     [SerializeField] AudioClip mysteryTone;
-    
+
+
+    [SerializeField] AudioClip hover;
+
+    [SerializeField] AudioClip click;
 
     [Category("Values for Status Changes and Checks")]
 
@@ -92,6 +96,12 @@ public class Pumpkin : MonoBehaviour
     {
             if(clicked == false)
             {
+                if(chestButton.interactable == true)
+                {
+                    //only plays if button is interactable
+                    SoundManager.Instance.PlaySound(hover);
+                }
+                
                 //upon pointer enter on button method is called and if a pumpkin has not already been clicked currently will call shake animation and turn on (increase scale of) outline.
             
                 hoveredOnce = true;
@@ -130,6 +140,8 @@ public class Pumpkin : MonoBehaviour
         
         if(clicked == false)
         {
+            
+            SoundManager.Instance.PlaySound(click);
             clicked = true;
             Debug.Log("notStopped");
             //if a pumpkin has not already been clicked stop all animation on pumpkin turn off outline and start open animation.

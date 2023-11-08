@@ -57,7 +57,7 @@ public class MainPanelScript : MonoBehaviour
     {
         //Method for when game ends
         mainPanel.transform.localPosition = new Vector3(0f, 0f, 0f);
-        mainPanel.DOAnchorPos(new Vector2(0f, -1000f), mainPanelAnimationDuration, false).SetEase(Ease.InOutExpo).OnComplete(()=>{
+        mainPanel.DOAnchorPos(new Vector2(0f, -1000f), mainPanelAnimationDuration/2, false).SetEase(Ease.InOutExpo).OnComplete(()=>{
             canvasGroup.alpha = 0f;
         });
     }

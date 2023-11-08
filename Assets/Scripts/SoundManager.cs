@@ -39,6 +39,7 @@ public class SoundManager : MonoBehaviour
         else if (lastEffect > (Time.time - 0.1f))
 
         {
+            //stops from sound being spammed, specifically during candy collection.
             Debug.Log("stopped");
             return;
             
@@ -56,6 +57,13 @@ public class SoundManager : MonoBehaviour
     {
         AudioListener.volume = value;
     }
+
+    public void StopCurrentEffect()
+    {
+        effectSource.Stop();
+    }
+
+
     
     
     

@@ -25,6 +25,8 @@ public class GameController : MonoBehaviour
     [SerializeField] AudioClip batSound;
     [SerializeField] AudioClip smokeSound;
 
+    [SerializeField] AudioClip notEnough;
+
 
     
     [Category("Play Menu and Denominations")]
@@ -117,6 +119,7 @@ public class GameController : MonoBehaviour
             //game does not start if user does not have enough balance.
 
            Debug.Log("Not Enough Balance");
+           SoundManager.Instance.PlaySound(notEnough);
 
         }
         else
