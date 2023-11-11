@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
     static public GameObject[] selectablePumpkins =  new GameObject[9]; //array used to check whether pumpkin button is selectable when using keyboard navigation.
      static public bool inGame = false;
     float winAmount;
-    float[] chestAmounts;
+    WinningSolver.AmountsInList[] chestAmounts;
     float tempAmount;
     int clickAmounts;
     int currentAmount;
@@ -99,6 +99,7 @@ public class GameController : MonoBehaviour
                 pumpkins[i].ButtonOn();
                 
         }
+        
 
         
         
@@ -188,6 +189,7 @@ public class GameController : MonoBehaviour
             }
             else
             {
+                
                  (winAmount, chestAmounts) = solver.DecideWinAmounts(currentDenom); //if multiplier is not 0 call method to decide the win amounts and what amounts will be found each chest click.
                  clickAmounts = chestAmounts.Length; //list of chest amounts is the total amount of times user will be able to open chests before they get click and get a pooper.
             }
@@ -263,7 +265,7 @@ public class GameController : MonoBehaviour
         else
         {
             //if not pooper call method to spawn and move candy to last win number.
-            Debug.Log(chestAmounts[currentAmount]);
+            Debug.Log(chestAmounts[currentAmount].Number);
 
             //balance.AddToBalance(chestAmounts[currentAmount]);
 

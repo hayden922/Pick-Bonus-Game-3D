@@ -41,7 +41,7 @@ public class SoundManager : MonoBehaviour
 
         {
             //stops from sound being spammed, specifically during candy collection.
-            Debug.Log("stopped");
+            
             return;
             
 

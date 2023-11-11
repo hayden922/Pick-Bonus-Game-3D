@@ -141,9 +141,9 @@ public class Pumpkin : MonoBehaviour
         if(clicked == false)
         {
             
-            SoundManager.Instance.PlaySound(click);
+            SoundManager.Instance.PlaySound(mysteryTone);
             clicked = true;
-            Debug.Log("notStopped");
+            
             //if a pumpkin has not already been clicked stop all animation on pumpkin turn off outline and start open animation.
            // pump.transform.DOKill();
             outlineScript.OutlineWidth = 0;
@@ -188,14 +188,11 @@ public class Pumpkin : MonoBehaviour
         pump.localRotation = Quaternion.identity; //setting pumpkin rotation to default starting rot.
         
         ResetLid(); //method for reseting lid to original position.
-        
         //moves chest to middle of screen, scaling it up and does premptive spin for rotating lid to open chest.
         pump.DOMove(openTargetPosition, openAnimationDuration).SetEase(Ease.Linear); 
-        
-        pump.DOScale(openTargetScale, openAnimationDuration).SetEase(Ease.Linear).OnComplete(()=>{
-
-            SoundManager.Instance.PlaySound(mysteryTone);
-            pump.DORotate(spinTargetRotation, 0.75f, RotateMode.FastBeyond360).SetEase(Ease.Linear).OnComplete(()=>{
+        pump.DOScale(openTargetScale, openAnimationDuration).SetEase(Ease.Linear);
+        //SoundManager.Instance.PlaySound(mysteryTone);
+        pump.DORotate(spinTargetRotation, openAnimationDuration, RotateMode.FastBeyond360).SetEase(Ease.Linear).OnComplete(()=>{
 
                 //if statment is here if I wanted to make animaiton changes between pooper or default candy collection animation, but not current differnece at the moment.
                 if (controller.NextIsPooper())
@@ -225,7 +222,7 @@ public class Pumpkin : MonoBehaviour
 
             });
             
-        });
+        
 
 
         

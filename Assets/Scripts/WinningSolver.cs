@@ -5,11 +5,33 @@ using UnityEngine;
 using JetBrains.Annotations;
 using TMPro;
 using System;
+using Unity.VisualScripting;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Schema;
 public class WinningSolver : MonoBehaviour
 {
     float multiplier;
 
     [SerializeField] TextMeshProUGUI lastWinText;
+
+    int multiplierChest = 0;
+
+    AmountsInList[] amountsInChests;
+
+     public class AmountsInList {
+           
+            public float Number;
+            public bool Multiplier;
+
+            public int AppliedMultiplier;
+           
+            public AmountsInList (float number, bool multiplier, int appliedMultiplier){
+                Number = number;
+                Multiplier = multiplier;    
+                AppliedMultiplier = appliedMultiplier;
+            }
+        }
+    
 
     void Start()
     {
@@ -74,48 +96,143 @@ public class WinningSolver : MonoBehaviour
         
     }
 
-    public (float, float[]) DecideWinAmounts(float denomAmount)
+    public (float, AmountsInList[]) DecideWinAmounts(float denomAmount)
     {
         //Method decides win amount and its division amoungst chests.
         int randChestNum = UnityEngine.Random.Range(1,9); //random number of chest to split win amount into. 1 to 8
         Debug.Log("randChestNum");
         Debug.Log(randChestNum);
-        List<float> chestAmountsList = new List<float>(); //list of amounts
+       /// List<float> chestAmountsList = new List<float>(); //list of amounts
         float smallAmount = (denomAmount*multiplier) / 0.05f; //small amount is used to seperate win amount easier. Because each possible num is divisable by 0.05.
         Debug.Log(denomAmount);
         Debug.Log(multiplier);
         int currentAmount = System.Convert.ToInt32(smallAmount); //setting small amount to int for use in random range.
-        
-        for (int i = 0; i < randChestNum-1; i++) 
+        if(multiplier > 5)
         {
-            //loops for a number of times equal to the random amount of chests decided -1 so every chest is given a value.
-
-            if(currentAmount > 0) //checker just in case value is so low that it causes 0
+            float percent = UnityEngine.Random.Range(1, 101); // 1 to 100 
+            if(percent <= 10) //if number is less than or equal to 10 (10% chance)
             {
-            Debug.Log(currentAmount);
-            int subtractionAmount = UnityEngine.Random.Range(1,((currentAmount+1)/2)); //takes number from 1 to currentAmount/2. Divided by two so there will always be some value left over.
-
-           
-
-           
-
-            
-            float total = subtractionAmount*0.05f; //turns amount back into dollar amount
-
-            chestAmountsList.Add(total); //adds value to chest list.
-            
-            
-            currentAmount = currentAmount-subtractionAmount; //takes away amount put in list from current amount
+                multiplierChest = 3;
             }
+            else if(percent <= 25) //if number is less than or equal to 25 (15% chance)
+            {
+                multiplierChest = 2;
+            }
+
+            else if(percent <= 50) //if number is less than or equal to 50 (25% chance)
+            {
+                multiplierChest = 1;
+            }
+            else //if number is greater than 50 (50% chance)
+            {
+                multiplierChest = 0;
+            }
+        }
+        else
+        {
+            multiplierChest = 0;
+        }
+        Debug.Log(multiplierChest);
+        if(randChestNum < multiplierChest)
+        {
+            //if there are not enough chests to fit multipliers and win amount.
+             switch (multiplierChest) //using switch statment for different multiplier amounts.
+            {
+            case 3:
+                randChestNum = UnityEngine.Random.Range(4,9); //random number of chest to split win amount into. 4 to 8
+                break;   
+            case 2:
+                randChestNum = UnityEngine.Random.Range(3,9); //random number of chest to split win amount into. 3 to 8
+                break;
+            case 1:
+                randChestNum = UnityEngine.Random.Range(2,9); //random number of chest to split win amount into. 2 to 8
+                break;
+            default:
+                break;
+            }
+        }
+        
+        amountsInChests = new AmountsInList[randChestNum]; //list of amounts
+        for(int i = 0; i <amountsInChests.Length; i++)
+        {
+          amountsInChests[i] = new AmountsInList(0, false, 0);
+        }
+
+       
+       // int winsInChests = randChestNum - multiplierChest;
+       // if(winsInChests == 0)
+       // {
+       //     Debug.Log("chest Error");
+       // }
+
+
+        
+        for (int i=0; i < multiplierChest; i++)
+        {
+            bool found = false;
+            while(found == false)
+            {
+                int randPos = UnityEngine.Random.Range(0, amountsInChests.Length); //Do not want to put multiplier chest as last chest before pooper.   
+                if(!amountsInChests[randPos].Multiplier)
+                {
+                    Debug.Log("multiplierAdded");
+                    amountsInChests[randPos] = new AmountsInList(0f,true,0);
+                    found = true;
+                }  
+            }
+            
+            
+        }
+        int multiplierAmount = 0;
+        for (int i = 0; i < amountsInChests.Length-1; i++) 
+        {
+            
+            //loops for a number of times equal to the random amount of chests decided -1 so every chest is given a value.
+            
+            if(amountsInChests[i].Multiplier)
+            {
+                if(multiplierAmount < 2)
+                {
+                    multiplierAmount = 2;
+                }
+                else
+                {
+                     multiplierAmount = multiplierAmount*2;
+                }              
+            }
+            else
+            {
+                if(currentAmount > 0) //checker just in case value is so low that it causes 0
+                {
+                    Debug.Log(currentAmount);
+                    int subtractionAmount = UnityEngine.Random.Range(1,((currentAmount+1)/2)); //takes number from 1 to currentAmount/2. Divided by two so there will always be some value left over.
+
+           
+
+           
+
+            
+                    float total = subtractionAmount*0.05f; //turns amount back into dollar amount
+
+                   amountsInChests[i] =  new AmountsInList(total,false,multiplierAmount);
+                    Debug.Log("totalAdded");
+                   Debug.Log(amountsInChests[i].Number);
+
+            
+            
+                    currentAmount = currentAmount-subtractionAmount; //takes away amount put in list from current amount
+                }
+            }
+            
             
         }
 
-       Debug.Log(currentAmount);
+        
         float finalAddition = currentAmount*0.05f; //any left over value is the final number added to the list, as long as its not zero.
 
         if (finalAddition > 0)
         {
-                chestAmountsList.Add(finalAddition);
+             amountsInChests[amountsInChests.Length-1] = new AmountsInList(finalAddition,false,multiplierAmount);
         }
         else
         {
@@ -123,8 +240,8 @@ public class WinningSolver : MonoBehaviour
         }
         
 
-       
-        for (int i = chestAmountsList.Count - 1; i > 0; i--)
+       /*
+        for (int i = amountsInChests.Count - 1; i > 0; i--)
         {
             //randomizes list because method for finding values lead them in a predictable decreasing value sometimes.
             int j = UnityEngine.Random.Range(0, i + 1);
@@ -132,16 +249,21 @@ public class WinningSolver : MonoBehaviour
             chestAmountsList[i] = chestAmountsList[j];
             chestAmountsList[j] = temp;
         }
-
-        float[] chestAmounts = chestAmountsList.ToArray(); // turning list into array as I am more aware of how to handle arrays and previously created method were created to take in array.
+        */
+        //AmountsInList[] chestAmounts = amountsInChests.ToArray(); // turning list into array as I am more aware of how to handle arrays and previously created method were created to take in array.
        
 
         float winAmount = denomAmount*multiplier;
+
+        for (int i = 0; i < amountsInChests.Length; i++) 
+        {
+           Debug.Log(amountsInChests[i].Multiplier); 
+        }
        
 
         
 
-        return (winAmount, chestAmounts);
+        return (winAmount, amountsInChests);
 
 
 
