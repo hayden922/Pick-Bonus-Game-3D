@@ -93,118 +93,18 @@ public class WinningSolver : MonoBehaviour
             
         }
         
+        
+       
         return multiplier; 
 
-
         
     }
-
-
-
-
-
-
-    /*
-    private void SeperationDecider(int currentAmount, int divisorValue, float smallAmount)
-    {
-        //Debug.Log(currentAmount);
-        float combinedTotal;
-        do{
-            int multiplierAmount = divisorValue;
-            currentAmount = System.Convert.ToInt32(smallAmount);
-            combinedTotal = 0;
-            for (int i = amountsInChests.Count-1; i >= 0; i--) 
-            {
-                    //Debug.Log(i);
-                //loops for a number of times equal to the random amount of chests decided -1 so every chest is given a value.
-                if(amountsInChests[i].Multiplier)
-                {
-                    if(multiplierAmount == 2)
-                    {
-                        multiplierAmount -= 2;
-                    }
-                    else if(multiplierAmount == 0)
-                    {
-
-                        multiplierAmount = 0;
-                    }
-                    else
-                    {
-                        multiplierAmount /= 2;  
-                    }
-                              
-                }
-                else
-                {
-                    if(currentAmount > 0) //checker just in case value is so low that it causes 0
-                    {
-                        
-                        float total = 0;
-                        int subtractionAmount = 0;
-                        
-                    
-                                
-                        //subtractionAmount = UnityEngine.Random.Range(1,(((currentAmount/multiplierAmount)+1)/2))*multiplierAmount;
-                        
-                        if(multiplierAmount == 0)
-                        {
-                            
-                            subtractionAmount = UnityEngine.Random.Range(1, (currentAmount + 1)); 
-                        }
-                        else
-                        {
-                            
-                            do
-                            {
-                                subtractionAmount = multiplierAmount * UnityEngine.Random.Range(1, ((currentAmount/multiplierAmount)+1));                        
-                            } while (subtractionAmount % multiplierAmount != 0);         
-                        }
-
-                                
-                            //takes number from 1 to currentAmount/2. Divided by two so there will always be some value left over.
-
-                            
-                        total = (subtractionAmount)*0.05f; //turns amount back into dollar amount
-                       // Debug.Log(subtractionAmount);
-                       // Debug.Log(total);
-                        combinedTotal += total; 
-
-                        amountsInChests[i] =  new AmountsInList(total,false,multiplierAmount);
-                        
-                
-                        currentAmount = currentAmount-subtractionAmount; //takes away amount put in list from current amount
-                    }
-                    else
-                    {
-                        amountsInChests[i] =  new AmountsInList(0f,false,0);
-                    }
-                }
-                
-                
-            }
-
-
-
-    
-
-
-        
-        }while(currentAmount != 0 && (combinedTotal*0.05f) != smallAmount);
-        
-
-        
-       // Debug.Log(currentAmount);
-       // Debug.Log("removing");
-        amountsInChests.RemoveAll(item => item.Number == 0 && !item.Multiplier);
-    
-       
-    }
-    */
 
     public (float, AmountsInList[]) DecideWinAmounts(float denomAmount)
     {
         //Method decides win amount and its division amoungst chests.
-         int randChestNum = UnityEngine.Random.Range(1,9); //random number of chest to split win amount into. 1 to 8
+         //int randChestNum = 3;
+         int randChestNum  = UnityEngine.Random.Range(1,9); //random number of chest to split win amount into. 1 to 8
         
        /// List<float> chestAmountsList = new List<float>(); //list of amounts
         float smallAmount = (denomAmount*multiplier) / 0.05f; //small amount is used to seperate win amount easier. Because each possible num is divisable by 0.05.
@@ -217,29 +117,29 @@ public class WinningSolver : MonoBehaviour
             float percent = UnityEngine.Random.Range(1, 101); // 1 to 100 
             if(percent <= 10) //if number is less than or equal to 10 (10% chance)
             {
-                multiplierChest = 3;
-                divisorValue = 8;
-                
+               // multiplierChest = 3;
+               // divisorValue = 8;
+                 multiplierChest = 1;
+               divisorValue = 2;
             }
             else if(percent <= 25) //if number is less than or equal to 25 (15% chance)
             {
-                 multiplierChest = 3;
-                divisorValue = 8;
+                 multiplierChest = 1;
+               divisorValue = 2;
                // multiplierChest = 2;
               //  divisorValue = 4;
             }
 
             else if(percent <= 50) //if number is less than or equal to 50 (25% chance)
             {
-                 multiplierChest = 3;
-                divisorValue = 8;
-               // multiplierChest = 1;
-               // divisorValue = 2;
+                
+               multiplierChest = 1;
+               divisorValue = 2;
             }
             else //if number is greater than 50 (50% chance)
             {
-                 multiplierChest = 3;
-                divisorValue = 8;
+                 multiplierChest = 1;
+               divisorValue = 2;
                //multiplierChest = 0;
                // divisorValue = 0;
             }
@@ -256,13 +156,13 @@ public class WinningSolver : MonoBehaviour
              switch (multiplierChest) //using switch statment for different multiplier amounts.
             {
             case 3:
-                randChestNum = UnityEngine.Random.Range(5,9); //random number of chest to split win amount into. 4 to 8
+                randChestNum = UnityEngine.Random.Range(5,9); //random number of chest to split win amount into. 5 to 8
                 break;   
             case 2:
-                randChestNum = UnityEngine.Random.Range(4,9); //random number of chest to split win amount into. 3 to 8
+                randChestNum = UnityEngine.Random.Range(4,9); //random number of chest to split win amount into. 4 to 8
                 break;
             case 1:
-                randChestNum = UnityEngine.Random.Range(3,9); //random number of chest to split win amount into. 2 to 8
+                randChestNum = UnityEngine.Random.Range(3,9); //random number of chest to split win amount into. 3 to 8
                 break;
             default:
                 break;
@@ -282,22 +182,29 @@ public class WinningSolver : MonoBehaviour
             int randPos;
             do
             {
-                randPos = UnityEngine.Random.Range(0, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper.
+                if(smallAmount%divisorValue != 0)
+                {
+                   randPos = UnityEngine.Random.Range(1, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper. 
+                }
+                else
+                {
+                    randPos = UnityEngine.Random.Range(0, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper.
+                }
+                
                 
             }while(amountsInChests[randPos].Multiplier);
                    
-         //       Debug.Log(randPos);
-        //    Debug.Log("multiplierAdded");
+       
             amountsInChests[randPos] = new AmountsInList(0f,true,0);
                     
         }  
             
         
-        //SeperationDecider(currentAmount, divisorValue, smallAmount); 
+        
 
         
 
-        //Debug.Log(currentAmount);
+        
         float combinedTotal;
         do{
             int multiplierAmount = divisorValue;
@@ -305,7 +212,7 @@ public class WinningSolver : MonoBehaviour
             combinedTotal = 0;
             for (int i = amountsInChests.Count-1; i >= 0; i--) 
             {
-                    //Debug.Log(i);
+                   
                 //loops for a number of times equal to the random amount of chests decided -1 so every chest is given a value.
                 if(amountsInChests[i].Multiplier)
                 {
@@ -338,8 +245,16 @@ public class WinningSolver : MonoBehaviour
                         
                         if(multiplierAmount == 0)
                         {
+                            if(i == 0)
+                            {
+                                subtractionAmount = currentAmount;
+                            }
+
+                            else
+                            {
+                                subtractionAmount = UnityEngine.Random.Range(1, (currentAmount + 1)); 
+                            }
                             
-                            subtractionAmount = UnityEngine.Random.Range(1, (currentAmount + 1)); 
                         }
                         else
                         {

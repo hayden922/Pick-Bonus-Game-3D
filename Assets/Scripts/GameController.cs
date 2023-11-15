@@ -112,7 +112,7 @@ public class GameController : MonoBehaviour
     public void Play()
     {
         
-       
+        
         //Method attached to play button. Initiates main game.
         
         if (currentDenom > BalanceScript.currentBalance)
@@ -127,6 +127,7 @@ public class GameController : MonoBehaviour
         {
             //sets user to in game setting correct values.
             inGame = true;
+            candyScript.ResetMultiplierUI();
              for (int i = 0; i < selectablePumpkins.Length; i++)
              {
                 
