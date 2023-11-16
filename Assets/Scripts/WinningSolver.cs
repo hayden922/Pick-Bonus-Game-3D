@@ -117,29 +117,29 @@ public class WinningSolver : MonoBehaviour
             float percent = UnityEngine.Random.Range(1, 101); // 1 to 100 
             if(percent <= 10) //if number is less than or equal to 10 (10% chance)
             {
-               // multiplierChest = 3;
-               // divisorValue = 8;
-                 multiplierChest = 1;
-               divisorValue = 2;
+               multiplierChest = 3;
+                divisorValue = 8;
+                
             }
             else if(percent <= 25) //if number is less than or equal to 25 (15% chance)
             {
-                 multiplierChest = 1;
-               divisorValue = 2;
+                 multiplierChest = 3;
+                divisorValue = 8;
                // multiplierChest = 2;
               //  divisorValue = 4;
             }
 
             else if(percent <= 50) //if number is less than or equal to 50 (25% chance)
             {
-                
-               multiplierChest = 1;
-               divisorValue = 2;
+                multiplierChest = 3;
+                divisorValue = 8;
+               //multiplierChest = 1;
+              // divisorValue = 2;
             }
             else //if number is greater than 50 (50% chance)
             {
-                 multiplierChest = 1;
-               divisorValue = 2;
+                multiplierChest = 3;
+                divisorValue = 8;
                //multiplierChest = 0;
                // divisorValue = 0;
             }
@@ -178,26 +178,41 @@ public class WinningSolver : MonoBehaviour
 
       //  Debug.Log(randChestNum);
         for (int i=1; i <= multiplierChest; i++)
-        {
-            int randPos;
-            do
+        {   
+            if(divisorValue > 0)
             {
-                if(smallAmount%divisorValue != 0)
+                int randPos;
+                do
                 {
-                   randPos = UnityEngine.Random.Range(1, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper. 
-                }
-                else
-                {
-                    randPos = UnityEngine.Random.Range(0, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper.
-                }
-                
-                
-            }while(amountsInChests[randPos].Multiplier);
-                   
-       
-            amountsInChests[randPos] = new AmountsInList(0f,true,0);
+                    if(smallAmount%divisorValue != 0)
+                    {
+
+                        if(amountsInChests.Count <= 2)
+                        {
+                            Debug.Log("errorWithMultiChests");
+                            randPos = 0;
+                            break;
+                        }
+                        else
+                        {
+                            randPos = UnityEngine.Random.Range(1, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper. 
+                        }
                     
-        }  
+                    }
+                    else
+                    {
+                        randPos = UnityEngine.Random.Range(0, amountsInChests.Count-1); //Do not want to put multiplier chest as last chest before pooper.
+                    }
+                    
+                    
+                }while(amountsInChests[randPos].Multiplier);
+                    
+        
+                amountsInChests[randPos] = new AmountsInList(0f,true,0);
+                        
+            }  
+        }
+            
             
         
         
@@ -294,7 +309,7 @@ public class WinningSolver : MonoBehaviour
 
 
         
-        }while(currentAmount != 0 && (combinedTotal*0.05f) != smallAmount);
+        }while(currentAmount != 0 && (combinedTotal/0.05f) != smallAmount);
         
 
         

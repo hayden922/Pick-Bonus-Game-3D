@@ -19,6 +19,11 @@ public class CandyScript : MonoBehaviour
 {
 
 
+    
+
+   
+    [SerializeField] GameController controller;
+
     [Category("Chest Amount Text")]
     [SerializeField] float chestAmountAnimationDuration;
 
@@ -39,6 +44,9 @@ public class CandyScript : MonoBehaviour
 
      [SerializeField] TextMeshProUGUI multiUIText;
 
+
+    [SerializeField]  TextMeshProUGUI multiWinAmountTempText;
+     [SerializeField]  CanvasGroup multiWinAmountTempCanvasGroup;
     int multiplierNumber = 0;
 
     [SerializeField] GameObject[] multiplierUICandy;
@@ -67,7 +75,9 @@ public class CandyScript : MonoBehaviour
 
     [SerializeField] private GameObject candyPrefab;
 
-    [SerializeField] private GameObject candyPrefabExtra;
+    [SerializeField] private GameObject[] candyPrefabExtras;
+
+    GameObject candyPrefabExtra;
 
     [SerializeField] int candyAnimationDuration;
 
@@ -160,9 +170,9 @@ public class CandyScript : MonoBehaviour
          Vector3 candyScale  =  candyObUI.transform.localScale;
         chestAmountCanvasGroup.alpha = 1f;
         chestAmountRect.transform.localPosition = new Vector3(0f, 0f, 0f);
-        candyObUI.transform.DOScale(candyObUI.transform.localScale*1.8f, chestAmountAnimationDuration).SetEase(Ease.OutBack);
-        candyObUI.transform.DOMove(new Vector3(candyObUIStartingPos.x,candyObUIStartingPos.y,candyObUIStartingPos.z), chestAmountAnimationDuration).SetEase(Ease.InOutQuint).OnComplete(()=>{
-                candyObUI.transform.DOScale(candyScale, .5f).SetEase(Ease.InCubic).OnComplete(()=>{
+        candyObUI.transform.DOScale(candyObUI.transform.localScale*1.8f, 0.5f).SetEase(Ease.OutBack);
+        candyObUI.transform.DOMove(new Vector3(candyObUIStartingPos.x,candyObUIStartingPos.y,candyObUIStartingPos.z),  0.5f).SetEase(Ease.InOutQuint).OnComplete(()=>{
+                candyObUI.transform.DOScale(candyScale,  0.25f).SetEase(Ease.InCubic).OnComplete(()=>{
                     if(multiplierNumber == 0)
                     {
                         multiUIText.gameObject.SetActive(true);
@@ -175,6 +185,7 @@ public class CandyScript : MonoBehaviour
                         chestAmountCanvasGroup.alpha = 0f;
                         currentChest.CollectionEnd();
                         SoundManager.Instance.PlaySound(woosh);
+                        controller.ChangePumpkinColor(currentChest,multiUIText.text);
                         
             
                     }); 
@@ -202,19 +213,33 @@ public class CandyScript : MonoBehaviour
     {
      //Method for incrementing value, specfically for balance.
         //await Task.Delay(TimeSpan.FromSeconds(1.5f));
-        float incrementTime = Mathf.Abs(currentAmount.Number - (currentAmount.Number/currentAmount.AppliedMultiplier)) * 0.05f;
-		float time = 0;
-		chestAmountText.text = (currentAmount.Number/currentAmount.AppliedMultiplier).ToString("C",new CultureInfo("en-US"));
+            float incrementTime;
+            
+            if(Mathf.Abs(currentAmount.Number - (currentAmount.Number/currentAmount.AppliedMultiplier)) < 10f)
+            {
+                 incrementTime = Mathf.Abs(currentAmount.Number - (currentAmount.Number/currentAmount.AppliedMultiplier)) * 0.25f;
+            }
+            else
+            {
+                incrementTime = Mathf.Abs(currentAmount.Number - (currentAmount.Number/currentAmount.AppliedMultiplier)) * 0.05f;
+            }
+            
+            
+            float time = 0;
+            chestAmountText.text = (currentAmount.Number/currentAmount.AppliedMultiplier).ToString("C",new CultureInfo("en-US"));
 
-		while ( time < incrementTime )
-		{
-			await Task.Yield();
+            while ( time < incrementTime )
+            {
+                await Task.Yield();
 
-			time += Time.deltaTime;
-			float factor = time / incrementTime;
+                time += Time.deltaTime;
+                float factor = time / incrementTime;
 
-			chestAmountText.text = ((float) Mathf.Lerp(currentAmount.Number/currentAmount.AppliedMultiplier, currentAmount.Number, factor)).ToString("C",new CultureInfo("en-US"));
-		}
+                chestAmountText.text = ((float) Mathf.Lerp(currentAmount.Number/currentAmount.AppliedMultiplier, currentAmount.Number, factor)).ToString("C",new CultureInfo("en-US"));
+            }
+
+        await Task.Delay(TimeSpan.FromSeconds(0.1f));
+
         
     }
     private GameObject[] SpawnCandy(int amount, WinningSolver.AmountsInList currentAmount, Pumpkin currentChest, GameObject candySpawn)
@@ -412,6 +437,17 @@ public class CandyScript : MonoBehaviour
             
             SoundManager.Instance.PlaySound(multiNotification);
 
+
+             multiWinAmountTempText.text = multiplierNumber.ToString() + "x";
+
+            multiWinAmountTempCanvasGroup.alpha = 0f;
+            multiWinAmountTempText.transform.DOMove(new Vector2(multiWinAmountTempText.transform.position.x,multiWinAmountTempText.transform.position.y + .75f), 0.5f, false).SetEase(Ease.OutBounce); 
+            multiWinAmountTempCanvasGroup.DOFade(1f, 0.5f);
+
+
+
+
+            
             
             chestAmountText.color = GreenTextColor;
             
@@ -425,8 +461,10 @@ public class CandyScript : MonoBehaviour
 
 
                 
-            Debug.Log("done");
+            
             await MultiplierIncrement(currentChest, currentAmount);
+
+
             GameObject[] secondArray = SpawnCandy(System.Convert.ToInt32(currentAmount.Number/0.05f) - amount,currentAmount,currentChest,candyPrefabExtra);
 
             riseAnim = new List<Task>();
@@ -462,6 +500,11 @@ public class CandyScript : MonoBehaviour
 
              var moveDone = new List<Task>();
 
+
+            multiWinAmountTempCanvasGroup.alpha = 1f;
+            multiWinAmountTempText.transform.DOMove(new Vector2(multiWinAmountTempText.transform.position.x,multiWinAmountTempText.transform.position.y - .75f), 0.5f, false).SetEase(Ease.InOutElastic); 
+            multiWinAmountTempCanvasGroup.DOFade(0f, 0.5f);
+
             foreach (GameObject candy in combinedCandy)
             {
 
@@ -494,6 +537,7 @@ public class CandyScript : MonoBehaviour
                     await Task.WhenAll(moveDone); 
                     if(!ended)
                     {
+                       
                         EndingWait(currentChest); 
                     }
                     
@@ -556,12 +600,15 @@ public class CandyScript : MonoBehaviour
             {
             case 4:
                 candyObUI = multiplierUICandy[2];
+                candyPrefabExtra = candyPrefabExtras[2];
                 break;   
             case 2:
                 candyObUI = multiplierUICandy[1];
+                candyPrefabExtra = candyPrefabExtras[1];
                 break;
             case 0:
                 candyObUI = multiplierUICandy[0];
+                candyPrefabExtra = candyPrefabExtras[0];
                 break;
             default:
                 break;

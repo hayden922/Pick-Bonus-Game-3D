@@ -6,6 +6,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System.ComponentModel;
+using TMPro;
+using System;
+using System.Threading.Tasks;
+
 
 public class Pumpkin : MonoBehaviour
 {
@@ -16,9 +20,31 @@ public class Pumpkin : MonoBehaviour
 
     [SerializeField] Button chestButton;
 
-    [Category("Animation Values")]
+    [SerializeField] TextMeshProUGUI multiplierText;
+
+    [SerializeField] CanvasGroup multiplierCanvasGroup;
+
+    [Category("Pumpkin Colors")]
+
+     [SerializeField] Texture2D[] pumpkinColors; 
+
+    int currentMulti = 0;
 
     
+
+    Material[] pumpkinSkinMats;
+    Material[] pumpkinLidMats;
+
+    [SerializeField] GameObject basePumpSkin;
+
+    [SerializeField] GameObject lidPumpSkin;
+
+
+    Renderer pumpkinSkin;
+    Renderer pumpkinLid;
+
+    [Category("Animation Values")]
+
     [SerializeField] private Vector3 spinTargetRotation;
     [SerializeField] private float spinAnimationDuration;
     [SerializeField] private Vector3 openTargetPosition;
@@ -68,9 +94,22 @@ public class Pumpkin : MonoBehaviour
     private bool hovering = false;  //bool for if the pumpkin is currently being hovered on.
     private bool shakeDone = false; //bool for if the pumpkin has finished its shake animation.
 
+    static public bool showingMultiplier = false;
+
     
     void Start()
     {
+
+        pumpkinSkin = basePumpSkin.GetComponent<MeshRenderer>();
+        pumpkinLid = lidPumpSkin.GetComponent<MeshRenderer>();
+
+        //pumpkinSkinMats = pumpkinSkin.materials;
+        //pumpkinLidMats = pumpkinSkin.materials;
+
+        
+        
+        ResetColor();
+
         //making sure lid of chest is in its correct location.
         pumpLid.localRotation = Quaternion.identity;
         pumpLid.localPosition = pumpLidPos;
@@ -90,6 +129,64 @@ public class Pumpkin : MonoBehaviour
             controller.DisableChestButtons();
         }
     }
+
+    public void ChangeColor(String multiplier)
+    {
+        showingMultiplier = true;
+        currentMulti +=1;
+        shakeDone = false; //double checking that shake done is turn off, as the start if spinning means it must be.
+        outlineScript.OutlineWidth = 0; //Also making sure outline is turned off if chest starts spinning.
+        pump.transform.DOKill(); //stops all current animations before it starts to spin.
+        pump.DORotate(spinTargetRotation, 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).OnComplete(()=>{
+            
+            
+            
+            pumpkinSkin.material.mainTexture = pumpkinColors[currentMulti];
+            pumpkinLid.material.mainTexture = pumpkinColors[currentMulti];
+            
+            
+
+            pump.DOPunchScale(new Vector3(pump.localScale.x,pump.transform.localScale.y,pump.transform.localScale.z*1.005f),.3f,0,0);
+                
+            multiplierText.text = multiplier;
+            multiplierCanvasGroup.alpha = 0f;
+            multiplierText.transform.DOMove(new Vector2(multiplierText.transform.position.x,multiplierText.transform.position.y + .75f), 0.25f, false).SetEase(Ease.OutBounce); 
+            multiplierCanvasGroup.DOFade(1f, 0.5f).OnComplete(async()=>{
+                await Task.Delay(TimeSpan.FromSeconds(0.25));
+                multiplierText.text = multiplier;
+                multiplierCanvasGroup.alpha = 1f;
+                multiplierText.transform.DOMove(new Vector2(multiplierText.transform.position.x,multiplierText.transform.position.y - .75f), 0.25f, false).SetEase(Ease.InOutElastic); 
+                multiplierCanvasGroup.DOFade(0f, 0.25f).OnComplete(()=>{
+                    showingMultiplier = false;
+                    clicked = false;
+                    controller.EnableChestButtons();
+                    SpinChest();
+                });
+                    
+            });
+                
+
+
+                
+        });
+                
+           
+
+        
+
+        
+    }
+
+    public void ResetColor()
+    {
+        currentMulti =  0;
+
+        pumpkinSkin.material.mainTexture = pumpkinColors[currentMulti];
+        pumpkinLid.material.mainTexture = pumpkinColors[currentMulti];
+    }
+
+
+   
 
 
     public void Hover()
@@ -270,8 +367,13 @@ public class Pumpkin : MonoBehaviour
 
             
             this.gameObject.SetActive(false);
-            clicked = false;
-            controller.EnableChestButtons();
+
+            if(!showingMultiplier)
+            {
+                clicked = false;
+                controller.EnableChestButtons();
+            }
+            
             
 
         });
@@ -342,7 +444,7 @@ public class Pumpkin : MonoBehaviour
         
          
            
-         
+            
             shakeDone = false; //double checking that shake done is turn off, as the start if spinning means it must be.
             outlineScript.OutlineWidth = 0; //Also making sure outline is turned off if chest starts spinning.
            pump.transform.DOKill(); //stops all current animations before it starts to spin.

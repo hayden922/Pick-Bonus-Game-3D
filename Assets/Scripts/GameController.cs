@@ -27,6 +27,8 @@ public class GameController : MonoBehaviour
 
     [SerializeField] AudioClip notEnough;
 
+    [SerializeField] AudioClip multiChange;
+
 
     
     [Category("Play Menu and Denominations")]
@@ -131,7 +133,7 @@ public class GameController : MonoBehaviour
              for (int i = 0; i < selectablePumpkins.Length; i++)
              {
                 
-
+                
                 selectablePumpkins[i] = buttonGroup.transform.GetChild(i).gameObject;;
              }
             
@@ -281,6 +283,22 @@ public class GameController : MonoBehaviour
             
     }
 
+    public void ChangePumpkinColor(Pumpkin removedOne, String multiplier)
+    {
+            SoundManager.Instance.PlaySound(multiChange);
+            foreach(Pumpkin pumpkin in pumpkins)
+            {
+                if(pumpkin != removedOne)
+                {
+                    pumpkin.ChangeColor(multiplier);
+                    
+                }
+                
+
+            }
+
+    }
+
 
 
 
@@ -336,6 +354,7 @@ public class GameController : MonoBehaviour
             DisableChestButtons(); 
             for (int i = 0; i < pumpkins.Length; i++)
             {
+                pumpkins[i].ResetColor();
                 pumpkins[i].gameObject.SetActive(false);
                 pumpkins[i].ButtonOn();// just to make sure each button is enabled upon next play.
                 
