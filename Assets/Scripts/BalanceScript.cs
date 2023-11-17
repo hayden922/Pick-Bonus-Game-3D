@@ -11,19 +11,16 @@ using System.ComponentModel;
 public class BalanceScript : MonoBehaviour
 {
 
-    [Category("Balance")]
+    
+    [field: Header("Balance")]
     private float startingBalance = 10.00f;
     static public float currentBalance{get; private set;}
+    [SerializeField] TextMeshProUGUI balanceText;
+    float tempBalance;
 
-     [SerializeField] TextMeshProUGUI balanceText;
-
-     float tempBalance;
-
-    
-    [Category("Last Win")]
+     
+    [field: Header("Last Win")]
     static public float currentLastWin{get; private set;}
-   
-
     [SerializeField] TextMeshProUGUI lastWinText;
 
     
@@ -37,20 +34,17 @@ public class BalanceScript : MonoBehaviour
         
     }
 
-private IEnumerator IncrementCoroutine ()
+    private IEnumerator IncrementCoroutine ()
 	{
         //Method for incrementing value, specfically for balance.
         float incrementTime = 4;
 		float time = 0;
 		balanceText.text = currentBalance.ToString("C",new CultureInfo("en-US"));
-
 		while ( time < incrementTime )
 		{
 			yield return null;
-
 			time += Time.deltaTime;
 			float factor = time / incrementTime;
-
 			balanceText.text = ((float) Mathf.Lerp(currentBalance, tempBalance, factor)).ToString("C",new CultureInfo("en-US"));
 		}
         currentBalance = tempBalance;
@@ -63,14 +57,11 @@ private IEnumerator IncrementCoroutine ()
         float incrementTime = 1f;
 		float time = 0;
 		balanceText.text = currentBalance.ToString("C",new CultureInfo("en-US"));
-
 		while ( time < incrementTime )
 		{
 			yield return null;
-
 			time += Time.deltaTime;
 			float factor = time / incrementTime;
-
 			balanceText.text = ((float) Mathf.Lerp( currentBalance, tempBalance, factor)).ToString("C",new CultureInfo("en-US"));
 		}
         currentBalance = tempBalance;
@@ -85,7 +76,6 @@ private IEnumerator IncrementCoroutine ()
     {
         //method for adding to static value currentBalance. Calls increment coroutine to allow user to see value increase.
         tempBalance = currentBalance + add;
-        
         StartCoroutine(IncrementCoroutine());
         
 
@@ -95,7 +85,6 @@ private IEnumerator IncrementCoroutine ()
     {
         //method for subtracting to static value currentBalance. Calls decrement coroutine to allow user to see value decrease.
         tempBalance = currentBalance - subtract;
-
         StartCoroutine(DecrementCoroutine());
         
         
@@ -124,10 +113,5 @@ private IEnumerator IncrementCoroutine ()
 
         }
     }
-    
-
-   
-
-   
 
 }

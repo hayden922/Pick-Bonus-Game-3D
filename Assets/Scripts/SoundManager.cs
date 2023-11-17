@@ -14,14 +14,12 @@ public class SoundManager : MonoBehaviour
 
 
     void Awake() 
-    
     {   
         //making sure there is only one instance
         if(Instance == null) 
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
         }
         else
         {
@@ -30,28 +28,21 @@ public class SoundManager : MonoBehaviour
     }
 
     public void PlaySound(AudioClip audioClip) 
-    {
-
-        
+    {  
         if(effectSource.clip == audioClip && effectSource.isPlaying)
         {
             effectSource.Stop();
         }
         else if (lastEffect > (Time.time - 0.1f))
-
         {
-            //stops from sound being spammed, specifically during candy collection.
-            
-            return;
-            
-
+            //stops from sound being spammed, specifically during candy collection.   
+            return; 
         } 
         else
         {
             lastEffect = Time.time;
             effectSource.PlayOneShot(audioClip);
-        }
-        
+        }    
     }
 
     public void ChangeMasterVolume(float value)
@@ -65,8 +56,6 @@ public class SoundManager : MonoBehaviour
         musicSource.mute = !musicSource.mute;
     }
 
-
-
     //last two methods put in just in case
 
     public void StopCurrentEffect()
@@ -76,7 +65,6 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip FindCurrentSound()
     {
-
         AudioClip currentAudio = effectSource.clip;
         return currentAudio;
     }

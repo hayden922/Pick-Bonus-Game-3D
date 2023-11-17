@@ -7,61 +7,41 @@ using UnityEngine.InputSystem.UI;
 
 public class EventScript : MonoBehaviour
 {
-
     [SerializeField] GameObject playMenu;
-
     GameObject pumpkin;
-
     [SerializeField] EventSystem eventSystem; //object this script is attached to.
-
     private Vector3 tmpMousePosition;
-    
-    
-    
     
     void Start()
     {
        tmpMousePosition = Input.mousePosition; //setting temporary mouse position to the inital input mouse position to check whether user uses their mouse or not.
-
     }
 
    
     void Update()
     {
-
         //if statment for if the user decideds to use keyboard for navigation.
-       if (Input.GetKeyDown(KeyCode.UpArrow)||Input.GetKeyDown(KeyCode.DownArrow)||Input.GetKeyDown(KeyCode.RightArrow)||Input.GetKeyDown(KeyCode.LeftArrow)||Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.D)||Input.GetKeyDown(KeyCode.A))
-       {
-        
-        if(eventSystem.currentSelectedGameObject == null)
+        if (Input.GetKeyDown(KeyCode.UpArrow)||Input.GetKeyDown(KeyCode.DownArrow)||Input.GetKeyDown(KeyCode.RightArrow)||Input.GetKeyDown(KeyCode.LeftArrow)||Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.D)||Input.GetKeyDown(KeyCode.A))
         {
-            //if not object is currently selected when switching to using keyboard use SwitchToPlayMenu() or SwitchToPumpkins() to select correct button.
-             if(GameController.inGame == false)
+            if(eventSystem.currentSelectedGameObject == null)
             {
-            SwitchToPlayMenu();
+                //if not object is currently selected when switching to using keyboard use SwitchToPlayMenu() or SwitchToPumpkins() to select correct button.
+                if(GameController.inGame == false)
+                {
+                SwitchToPlayMenu();
+                }
+                
+                else
+                {
+                SwitchToPumpkins();
+                }
             }
-            
-            else
-            {
-             SwitchToPumpkins();
-            }
-
-
         }
 
-       
-
-       
-
-    }
-
-
-    
         if (tmpMousePosition != Input.mousePosition){
             //if user moves mouse switch to mouse navigation, calling SwitchToNull() to unselect current button used in keyboard navigation.
             SwitchToNull();
             tmpMousePosition = Input.mousePosition;
-    
         }
         
     }
@@ -84,17 +64,13 @@ public class EventScript : MonoBehaviour
                 eventSystem.SetSelectedGameObject(GameController.selectablePumpkins[i]);
                 return;
             }
-        }
-        
-        
+        }  
     }
     
     public void SwitchToPlayMenu()
     {
         //switchs selection of event system to play button.
-
         eventSystem.SetSelectedGameObject(playMenu);
-
     }
 
 
